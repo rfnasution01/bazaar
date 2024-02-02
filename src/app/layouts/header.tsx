@@ -11,7 +11,7 @@ export function Header() {
   const path = pathSegements[1];
 
   return (
-    <header className="h-full w-full flex justify-between items-center lg:px-24 px-10 min-h-[10vh] shadow-md">
+    <header className="h-full w-full flex justify-between items-center lg:px-24 px-10 min-h-[10vh] shadow-md bg-white">
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2">
         <Image src="/logo.png" alt="Bazaar Logo" width={45} height={45} />

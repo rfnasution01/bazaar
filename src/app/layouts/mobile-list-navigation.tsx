@@ -1,10 +1,10 @@
-import { H3 } from "@/component/ui";
+import { H6 } from "@/component/ui";
 import { listNavigation } from "@/const";
 import Link from "next/link";
 
 export function MobileListNavigation({ path }: { path: string }) {
   return (
-    <div className="flex fixed bottom-0 left-0 border-t-2 bg-white w-full min-h-[10vh]">
+    <div className="flex fixed bottom-0 left-0 border-t-2 bg-white w-full min-h-[10vh] p-4">
       {listNavigation.map((item, idx) => (
         <Link
           href={`/${item?.url}`}
@@ -14,7 +14,7 @@ export function MobileListNavigation({ path }: { path: string }) {
           }`}
         >
           <span>{item?.icon}</span>
-          <H3>{item?.name}</H3>
+          <H6>{item?.name}</H6>
         </Link>
       ))}
     </div>
