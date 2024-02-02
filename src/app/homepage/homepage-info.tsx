@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../loading";
 import { convertSlugToText, roundToNDecimals } from "@/utils";
 import { Gauge } from "@/component/ui";
+import { CoinmarketCap } from ".";
 
 export function HomepageInfo() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -15,6 +16,11 @@ export function HomepageInfo() {
   const [infoTrendIndex, setInfoTrendingIndex] = useState<number>(0);
   const [infoStatusTrendIndex, setInfoStatusTrendingIndex] =
     useState<string>("");
+  const [stateCurrency, setStateCurrency] = useState({
+    symbol: "USD" as string | undefined,
+    currencySymbol: "$" as string | undefined,
+    price: "1" as string | undefined,
+  });
 
   useEffect(() => {
     const getDataInfo = async () => {
@@ -103,7 +109,7 @@ export function HomepageInfo() {
 
   return (
     <div className="h-full flex flex-col gap-y-4 lg:max-h-[80vh]">
-      <h1>CoinmarketCap</h1>
+      <CoinmarketCap stateCurrency={stateCurrency} />
       <div className="lg:grid-cols-12 lg:grid lg:gap-8 pr-8 pb-4 lg:overflow-y-auto">
         {listMarketCap.map((item, idx) => (
           <div
