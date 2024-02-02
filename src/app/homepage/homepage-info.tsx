@@ -1,112 +1,32 @@
 "use client";
-import { GetAsset } from "@/api";
 import { AssetsProps } from "@/component/props";
 import { listMarketCap } from "@/const";
-import { useEffect, useState } from "react";
 import Loading from "../loading";
 import { convertSlugToText, roundToNDecimals } from "@/utils";
 import { Gauge } from "@/component/ui";
 import { CoinmarketCap } from ".";
 
-export function HomepageInfo() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [infoLoser, setInfoLoser] = useState<AssetsProps[]>([]);
-  const [infoGainer, setInfoGainer] = useState<AssetsProps[]>([]);
-  const [infoTrending, setTrending] = useState<AssetsProps[]>([]);
-  const [infoTrendIndex, setInfoTrendingIndex] = useState<number>(0);
-  const [infoStatusTrendIndex, setInfoStatusTrendingIndex] =
-    useState<string>("");
-  const [stateCurrency, setStateCurrency] = useState({
-    symbol: "USD" as string | undefined,
-    currencySymbol: "$" as string | undefined,
-    price: "1" as string | undefined,
-  });
-
-  useEffect(() => {
-    const getDataInfo = async () => {
-      const data = await GetAsset({
-        stateReq: {
-          search: "",
-          limit: 2000,
-          offset: 0,
-        },
-        setLoading,
-      });
-
-      if (data?.data) {
-        // --- Top Loser ---
-        const sortedDataLoser = [...data.data].sort((a, b) => {
-          const changePercentA = Number(a.changePercent24Hr);
-          const changePercentB = Number(b.changePercent24Hr);
-          return changePercentA - changePercentB;
-        });
-
-        const top5Loser = sortedDataLoser.slice(0, 5);
-        setInfoLoser(top5Loser);
-
-        // --- Top Gainer ---
-        const sortedDataGainer = [...data.data].sort((a, b) => {
-          const changePercentA = Number(a.changePercent24Hr);
-          const changePercentB = Number(b.changePercent24Hr);
-          return changePercentB - changePercentA;
-        });
-
-        const top5Gainer = sortedDataGainer.slice(0, 5);
-        setInfoGainer(top5Gainer);
-
-        // --- Trending ---
-        const sortedDataByVolume = [...data.data].sort((a, b) => {
-          const volumeA = Number(a.volumeUsd24Hr);
-          const volumeB = Number(b.volumeUsd24Hr);
-          return volumeB - volumeA;
-        });
-
-        const top5Trending = sortedDataByVolume.slice(0, 5);
-        setTrending(top5Trending);
-
-        // --- Trend Index ---
-        const totalIncrease = data?.data.reduce(
-          (total: number, gainer: AssetsProps) => {
-            if (Number(gainer.changePercent24Hr) >= 0) {
-              return total + 1;
-            }
-            return total;
-          },
-          0
-        );
-
-        const totalDecrease = data?.data.reduce(
-          (total: number, gainer: AssetsProps) => {
-            if (Number(gainer.changePercent24Hr) < 0) {
-              return total + 1;
-            }
-            return total;
-          },
-          0
-        );
-
-        const averageIncrease = Math.ceil(
-          (totalIncrease / data?.data.length) * 100
-        );
-        const averageDecrease = Math.ceil(
-          (totalDecrease / data?.data.length) * 100
-        );
-
-        setInfoTrendingIndex(statusTrend(averageIncrease, averageDecrease));
-      }
-    };
-    getDataInfo();
-  }, []);
-
-  const statusTrend = (increase: number, decrease: number) => {
-    if (increase > decrease) {
-      setInfoStatusTrendingIndex("Bullish");
-      return increase;
-    }
-    setInfoStatusTrendingIndex("Bearish");
-    return 100 - decrease;
+export function HomepageInfo({
+  loading,
+  infoLoser,
+  infoGainer,
+  infoTrending,
+  infoTrendIndex,
+  infoStatusTrendIndex,
+  stateCurrency,
+}: {
+  loading: boolean;
+  infoLoser: AssetsProps[];
+  infoGainer: AssetsProps[];
+  infoTrending: AssetsProps[];
+  infoTrendIndex: number;
+  infoStatusTrendIndex: string;
+  stateCurrency: {
+    symbol: string | undefined;
+    currencySymbol: string | undefined;
+    price: string | undefined;
   };
-
+}) {
   return (
     <div className="h-full flex flex-col gap-y-4 lg:max-h-full">
       <CoinmarketCap stateCurrency={stateCurrency} />

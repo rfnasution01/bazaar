@@ -1,72 +1,45 @@
-"use client";
-import { GetAsset } from "@/api";
 import { AssetsProps } from "@/component/props";
-import { useEffect, useState } from "react";
-import { debounce } from "lodash";
 import Loading from "../loading";
 import { ListAssets } from ".";
+import { Dispatch, SetStateAction } from "react";
 
-export function HomepageAsset() {
-  const [assets, setAssets] = useState<AssetsProps[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const [stateFilter, setStateFilter] = useState<
-    Record<string, boolean | undefined>
-  >({
-    no: undefined,
-    nama: undefined,
-    simbol: undefined,
-    harga: undefined,
-    kenaikan: undefined,
-    marketCap: undefined,
-    volume: undefined,
-  });
-
-  const [search, setSearch] = useState<string | undefined>("");
-  const [page, setPage] = useState<number>(1);
-  const [offset, setOffset] = useState<number>(0);
-  const [limit, _setLimit] = useState<number>(100);
-
-  useEffect(() => {
-    const getData = async () => {
-      const data = await GetAsset({
-        stateReq: {
-          search: search,
-          limit: limit,
-          offset: offset,
-        },
-        setLoading,
-      });
-
-      if (data) {
-        // const filteredData = filterAssets(
-        //   data?.data as AssetsProps[],
-        //   stateFilter
-        // );
-        setAssets(data?.data);
-      }
-    };
-
-    const debouncedGetData = debounce(getData, 900);
-    debouncedGetData();
-
-    return () => {
-      debouncedGetData.cancel();
-    };
-  }, [limit, offset, search, stateFilter]);
-
-  console.log({ assets });
+export function HomepageAsset({
+  assets,
+  loading,
+  stateCurrency,
+}: {
+  assetsAll: AssetsProps[];
+  assets: AssetsProps[];
+  loading: boolean;
+  setShow: Dispatch<SetStateAction<boolean>>;
+  setSearch: Dispatch<SetStateAction<string>>;
+  stateCurrency: {
+    symbol: string | undefined;
+    currencySymbol: string | undefined;
+    price: string | undefined;
+  };
+}) {
+  // const [stateFilter, setStateFilter] = useState<
+  //   Record<string, boolean | undefined>
+  // >({
+  //   no: undefined,
+  //   nama: undefined,
+  //   simbol: undefined,
+  //   harga: undefined,
+  //   kenaikan: undefined,
+  //   marketCap: undefined,
+  //   volume: undefined,
+  // });
 
   return (
     <div className="h-full flex flex-col gap-y-4">
-      <div>Test</div>
-      <div className="">
+      <div>
         {loading ? (
           <Loading />
         ) : assets?.length <= 0 ? (
           "Data Not Found"
         ) : (
-          <ListAssets assets={assets} />
+          <ListAssets assets={assets} stateCurrency={stateCurrency} />
         )}
       </div>
     </div>
