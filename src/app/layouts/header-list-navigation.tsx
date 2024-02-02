@@ -10,10 +10,12 @@ export function ListNavigation({ path }: { path: string }) {
           href={`/${item?.url}`}
           key={idx}
           className={`hover:text-sky-600 ${
-            item?.url === path && "text-sky-600"
+            item?.url === path ? "text-sky-600" : "text-black"
           }`}
         >
-          <H5>{item?.name}</H5>
+          <H5>
+            {item?.name} {path}
+          </H5>
         </Link>
       ))}
     </div>
