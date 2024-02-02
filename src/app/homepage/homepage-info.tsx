@@ -108,13 +108,13 @@ export function HomepageInfo() {
   };
 
   return (
-    <div className="h-full flex flex-col gap-y-4 lg:max-h-[80vh]">
+    <div className="h-full flex flex-col gap-y-4 lg:max-h-full">
       <CoinmarketCap stateCurrency={stateCurrency} />
-      <div className="lg:grid-cols-12 lg:grid lg:gap-8 pr-8 pb-4 lg:overflow-y-auto">
+      <div className="lg:grid-cols-12 lg:grid lg:gap-8 lg:overflow-y-auto">
         {listMarketCap.map((item, idx) => (
           <div
             key={idx}
-            className="shadow-md lg:p-4 md:p-3 p-3 rounded-lg hover:shadow-lg hover:cursor-pointer lg:col-span-6"
+            className="shadow-md lg:p-4 rounded-lg hover:shadow-lg hover:cursor-pointer lg:col-span-6"
           >
             <div className="flex items-center gap-2">
               <span

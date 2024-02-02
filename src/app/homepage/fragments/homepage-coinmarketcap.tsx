@@ -3,8 +3,8 @@ import { FormatManipulationComponent, roundToNDecimals } from "@/utils";
 import { Loader } from "lucide-react";
 import "./homepage-coinmarketcap.css";
 import { useEffect, useState } from "react";
-import { GetAsset } from "../../api";
 import { AssetsProps } from "@/component/props";
+import { GetAsset } from "@/api";
 
 export function CoinmarketCap({
   stateCurrency,
