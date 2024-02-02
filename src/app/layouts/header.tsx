@@ -1,5 +1,5 @@
 "use client";
-import { H2, Nav } from "@/component/ui";
+import { H2, H4, Nav } from "@/component/ui";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,9 +15,9 @@ export function Header() {
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2">
         <Image src="/logo.png" alt="Bazaar Logo" width={45} height={45} />
-        <H2 className="text-sky-700 hover:cursor-pointer hover:text-sky-600">
+        <H4 className="text-sky-700 hover:cursor-pointer hover:text-sky-600">
           Bazaar
-        </H2>
+        </H4>
       </Link>
       {/* Navigation */}
       <Nav className="hidden lg:block">
