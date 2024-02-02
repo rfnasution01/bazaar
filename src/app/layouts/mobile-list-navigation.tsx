@@ -1,4 +1,3 @@
-import { H6 } from "@/component/ui";
 import { listNavigation } from "@/const";
 import Link from "next/link";
 
@@ -14,7 +13,9 @@ export function MobileListNavigation({ path }: { path: string }) {
           }`}
         >
           <span>{item?.icon}</span>
-          <H6>{item?.name}</H6>
+          <h6 className="text-sm font-light font-serif tracking-wide">
+            {item?.name}
+          </h6>
         </Link>
       ))}
     </div>

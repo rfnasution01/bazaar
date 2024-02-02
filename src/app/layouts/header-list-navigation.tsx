@@ -1,4 +1,3 @@
-import { H5 } from "@/component/ui";
 import { listNavigation } from "@/const";
 import Link from "next/link";
 
@@ -13,9 +12,9 @@ export function ListNavigation({ path }: { path: string }) {
             item?.url === path ? "text-sky-600" : "text-black"
           }`}
         >
-          <H5>
-            {item?.name} {path}
-          </H5>
+          <h5 className="text-md font-light font-serif tracking-wider">
+            {item?.name}
+          </h5>
         </Link>
       ))}
     </div>
