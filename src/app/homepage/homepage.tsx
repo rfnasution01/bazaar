@@ -225,7 +225,11 @@ export function Homepage() {
                 stateHeaderText={stateHeaderText}
               />
             ) : (
-              <HomepageDetail setShow={setShow} id={id} />
+              <HomepageDetail
+                setShow={setShow}
+                id={id}
+                stateCurrency={stateCurrency}
+              />
             )}
           </div>
         </div>

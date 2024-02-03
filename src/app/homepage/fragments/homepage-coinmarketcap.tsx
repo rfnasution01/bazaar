@@ -15,9 +15,7 @@ export function CoinmarketCap({
   return (
     <div className="invisible-scrollbar hover:cursor-pointer">
       <div className="flex items-center gap-2">
-        <h4 className="text-md font-medium whitespace-nowrap">
-          Volume : {isLoading ? "true" : "false"}
-        </h4>
+        <h4 className="text-md font-medium whitespace-nowrap">Volume:</h4>
         {isLoading || !stateHeaderText?.volume ? (
           <Loader className="animate-spin" />
         ) : (
