@@ -11,11 +11,15 @@ export function SelectAssets({
   loading,
   setSearch,
   stateCurrency,
+  setPage,
+  setOffset,
 }: {
   assets: AssetsProps[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   loading: boolean;
   setSearch: Dispatch<SetStateAction<string>>;
+  setPage: Dispatch<SetStateAction<number>>;
+  setOffset: Dispatch<SetStateAction<number>>;
   stateCurrency: {
     symbol: string | undefined;
     currencySymbol: string | undefined;
@@ -118,6 +122,8 @@ export function SelectAssets({
         if (optionSelected) {
           setQuery(optionSelected?.value);
           setSearch(optionSelected?.value);
+          setPage(1);
+          setOffset(0);
           setIsOpen(false);
         }
       }}

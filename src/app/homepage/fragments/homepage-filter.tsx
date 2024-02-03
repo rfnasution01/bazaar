@@ -8,11 +8,15 @@ export function HomepageSearch({
   loading,
   setSearch,
   stateCurrency,
+  setOffset,
+  setPage,
 }: {
   assets: AssetsProps[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   loading: boolean;
   setSearch: Dispatch<SetStateAction<string>>;
+  setPage: Dispatch<SetStateAction<number>>;
+  setOffset: Dispatch<SetStateAction<number>>;
   stateCurrency: {
     symbol: string | undefined;
     currencySymbol: string | undefined;
@@ -27,6 +31,8 @@ export function HomepageSearch({
         loading={loading}
         setSearch={setSearch}
         stateCurrency={stateCurrency}
+        setPage={setPage}
+        setOffset={setOffset}
       />
     </div>
   );

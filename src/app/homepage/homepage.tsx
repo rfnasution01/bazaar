@@ -146,19 +146,27 @@ export function Homepage() {
       <HomepageSearch
         assets={assetsAll}
         setIsOpen={setShow}
-        loading={loadingAsset}
+        loading={loading}
         setSearch={setSearch}
         stateCurrency={stateCurrency}
+        setPage={setPage}
+        setOffset={setOffset}
       />
       <div className="grid grid-cols-12 gap-x-8">
         <div className="lg:col-span-4 col-span-12">
           <HomepageAsset
             assetsAll={assetsAll}
             assets={assets}
-            loading={loading}
+            loading={loadingAsset}
+            setLoading={setLoadingAsset}
             setSearch={setSearch}
             setShow={setShow}
             stateCurrency={stateCurrency}
+            limit={limit}
+            offset={offset}
+            setOffset={setOffset}
+            page={page}
+            setPage={setPage}
           />
         </div>
         <div className="col-span-8 lg:block hidden sticky top-0 lg:sticky lg:top-0 lg:right-0 lg:h-full border-l-2 lg:pl-8 py:8">
@@ -174,7 +182,7 @@ export function Homepage() {
                 stateCurrency={stateCurrency}
               />
             ) : (
-              <HomepageDetail />
+              <HomepageDetail setShow={setShow} search={search} />
             )}
           </div>
         </div>
