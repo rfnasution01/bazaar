@@ -1,5 +1,5 @@
 "use client";
-import { AssetsProps } from "@/component/props";
+import { stateCoinmarketcap } from "@/component/props";
 import { listMarketCap } from "@/const";
 import Loading from "../loading";
 import { convertSlugToText, roundToNDecimals } from "@/utils";
@@ -7,34 +7,28 @@ import { Gauge } from "@/component/ui";
 import { CoinmarketCap } from ".";
 
 export function HomepageInfo({
-  loading,
-  infoLoser,
-  infoGainer,
-  infoTrending,
-  infoTrendIndex,
-  infoStatusTrendIndex,
+  isLoading,
   stateCurrency,
+  stateCoinmarketcap,
+  stateHeaderText,
 }: {
-  loading: boolean;
-  infoLoser: AssetsProps[];
-  infoGainer: AssetsProps[];
-  infoTrending: AssetsProps[];
-  infoTrendIndex: number;
-  infoStatusTrendIndex: string;
-  stateCurrency: {
-    symbol: string | undefined;
-    currencySymbol: string | undefined;
-    price: string | undefined;
-  };
+  isLoading: boolean;
+  stateCurrency: Record<string, string | undefined>;
+  stateHeaderText: Record<string, number | undefined>;
+  stateCoinmarketcap: stateCoinmarketcap;
 }) {
   return (
     <div className="h-full flex flex-col gap-y-4 lg:max-h-full">
-      <CoinmarketCap stateCurrency={stateCurrency} />
-      <div className="lg:grid-cols-12 lg:grid lg:gap-8 lg:overflow-y-auto">
+      <CoinmarketCap
+        stateCurrency={stateCurrency}
+        isLoading={isLoading}
+        stateHeaderText={stateHeaderText}
+      />
+      <div className="lg:grid-cols-12 lg:grid lg:gap-8 lg:overflow-y-auto px-1">
         {listMarketCap.map((item, idx) => (
           <div
             key={idx}
-            className="shadow-md lg:p-4 rounded-lg hover:shadow-lg hover:cursor-pointer lg:col-span-6"
+            className="shadow lg:p-4 rounded-lg hover:shadow-lg hover:cursor-pointer lg:col-span-6"
           >
             <div className="flex items-center gap-2">
               <span
@@ -54,12 +48,12 @@ export function HomepageInfo({
                 {item?.name}
               </h5>
             </div>
-            {loading ? (
+            {isLoading ? (
               <Loading />
             ) : idx === 0 ? (
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
-                {infoGainer &&
-                  infoGainer?.map((items, idx) => (
+                {stateCoinmarketcap?.infoGainer &&
+                  stateCoinmarketcap?.infoGainer?.map((items, idx) => (
                     <div className="flex items-center gap-2 w-full" key={idx}>
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
@@ -76,8 +70,8 @@ export function HomepageInfo({
               </div>
             ) : idx === 1 ? (
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
-                {infoLoser &&
-                  infoLoser?.map((items, idx) => (
+                {stateCoinmarketcap?.infoLoser &&
+                  stateCoinmarketcap?.infoLoser?.map((items, idx) => (
                     <div className="flex items-center gap-2 w-full" key={idx}>
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
@@ -94,8 +88,8 @@ export function HomepageInfo({
               </div>
             ) : idx === 2 ? (
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
-                {infoTrending &&
-                  infoTrending?.map((items, idx) => (
+                {stateCoinmarketcap?.infoTrending &&
+                  stateCoinmarketcap?.infoTrending?.map((items, idx) => (
                     <div className="flex items-center gap-2 w-full" key={idx}>
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
@@ -109,10 +103,10 @@ export function HomepageInfo({
               </div>
             ) : (
               <div className="flex justify-center items-start gap-2 mt-4">
-                {infoTrendIndex && (
+                {stateCoinmarketcap?.infoTrendIndex && (
                   <Gauge
-                    series={[infoTrendIndex]}
-                    status={infoStatusTrendIndex}
+                    series={[stateCoinmarketcap?.infoTrendIndex]}
+                    status={stateCoinmarketcap?.infoStatusTrendIndex}
                   />
                 )}
               </div>

@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 
 export function HomepageDetail({
-  search,
+  id,
   setShow,
 }: {
-  search: string;
+  id: string;
   setShow: Dispatch<SetStateAction<boolean>>;
 }) {
-  return <div className="bg-red-300">{search ?? "-"}</div>;
+  return <div className="bg-red-300">{id ?? "-"}</div>;
 }

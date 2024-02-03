@@ -10,21 +10,32 @@ export function Homepage() {
   const [assetsAll, setAssetsAll] = useState<AssetsProps[]>([]);
   const [assets, setAssets] = useState<AssetsProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingAsset, setLoadingAsset] = useState<boolean>(false);
-  const [infoLoser, setInfoLoser] = useState<AssetsProps[]>([]);
-  const [infoGainer, setInfoGainer] = useState<AssetsProps[]>([]);
-  const [infoTrending, setTrending] = useState<AssetsProps[]>([]);
-  const [infoTrendIndex, setInfoTrendingIndex] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingAsset, setIsLoadingAsset] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const [id, setId] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [offset, setOffset] = useState<number>(0);
   const limit = 100;
-  const [infoStatusTrendIndex, setInfoStatusTrendingIndex] =
-    useState<string>("");
   const [stateCurrency, setStateCurrency] = useState({
     symbol: "USD" as string | undefined,
     currencySymbol: "$" as string | undefined,
     price: "1" as string | undefined,
+  });
+  const [stateHeaderText, setHeaderText] = useState<
+    Record<string, number | undefined>
+  >({
+    marketCap: undefined,
+    volume: undefined,
+    btcDominance: undefined,
+    ethDominance: undefined,
+  });
+  const [stateCoinmarketcap, setStateCoinmarketcap] = useState({
+    infoLoser: undefined as AssetsProps[] | undefined,
+    infoGainer: undefined as AssetsProps[] | undefined,
+    infoTrending: undefined as AssetsProps[] | undefined,
+    infoTrendIndex: undefined as number | undefined,
+    infoStatusTrendIndex: "" as string,
   });
 
   useEffect(() => {
@@ -40,6 +51,40 @@ export function Homepage() {
 
       if (data?.data) {
         setAssetsAll(data?.data);
+        const totalMarketCap = data?.data?.reduce(
+          (acc: number, asset: AssetsProps) => acc + Number(asset.marketCapUsd),
+          0
+        );
+        const totalVolume = data?.data?.reduce(
+          (acc: number, asset: AssetsProps) =>
+            acc + Number(asset.volumeUsd24Hr),
+          0
+        );
+
+        // Perhitungan btcDominance
+        const btcAsset = data?.data?.find(
+          (asset: AssetsProps) => asset?.id === "bitcoin"
+        );
+        const btcDominance = btcAsset
+          ? (Number(btcAsset.marketCapUsd) / totalMarketCap) * 100
+          : 0;
+
+        // Perhitungan ethDominance
+        const ethAsset = data?.data?.find(
+          (asset: AssetsProps) => asset.id === "ethereum"
+        );
+        const ethDominance = ethAsset
+          ? (Number(ethAsset.marketCapUsd) / totalMarketCap) * 100
+          : 0;
+
+        setHeaderText((prevData) => ({
+          ...prevData,
+          marketCap: totalMarketCap,
+          volume: totalVolume,
+          btcDominance: btcDominance,
+          ethDominance: ethDominance,
+        }));
+
         // --- Top Loser ---
         const sortedDataLoser = [...data.data].sort((a, b) => {
           const changePercentA = Number(a.changePercent24Hr);
@@ -48,7 +93,6 @@ export function Homepage() {
         });
 
         const top5Loser = sortedDataLoser.slice(0, 5);
-        setInfoLoser(top5Loser);
 
         // --- Top Gainer ---
         const sortedDataGainer = [...data.data].sort((a, b) => {
@@ -58,7 +102,6 @@ export function Homepage() {
         });
 
         const top5Gainer = sortedDataGainer.slice(0, 5);
-        setInfoGainer(top5Gainer);
 
         // --- Trending ---
         const sortedDataByVolume = [...data.data].sort((a, b) => {
@@ -68,7 +111,6 @@ export function Homepage() {
         });
 
         const top5Trending = sortedDataByVolume.slice(0, 5);
-        setTrending(top5Trending);
 
         // --- Trend Index ---
         const totalIncrease = data?.data.reduce(
@@ -98,7 +140,13 @@ export function Homepage() {
           (totalDecrease / data?.data.length) * 100
         );
 
-        setInfoTrendingIndex(statusTrend(averageIncrease, averageDecrease));
+        setStateCoinmarketcap((prevState) => ({
+          ...prevState,
+          infoLoser: top5Loser,
+          infoGainer: top5Gainer,
+          infoTrending: top5Trending,
+          infoTrendIndex: statusTrend(averageIncrease, averageDecrease),
+        }));
       }
     };
     getDataInfo();
@@ -112,14 +160,10 @@ export function Homepage() {
           limit: limit,
           offset: offset,
         },
-        setLoading: setLoadingAsset,
+        setLoading: setIsLoadingAsset,
       });
 
       if (data) {
-        // const filteredData = filterAssets(
-        //   data?.data as AssetsProps[],
-        //   stateFilter
-        // );
         setAssets(data?.data);
       }
     };
@@ -130,24 +174,28 @@ export function Homepage() {
     return () => {
       debouncedGetData.cancel();
     };
-  }, [limit, offset, search]);
+  }, [limit, offset, search, page]);
 
   const statusTrend = (increase: number, decrease: number) => {
     if (increase > decrease) {
-      setInfoStatusTrendingIndex("Bullish");
+      setStateCoinmarketcap((prevState) => ({
+        ...prevState,
+        infoStatusTrendIndex: "Bullish",
+      }));
       return increase;
     }
-    setInfoStatusTrendingIndex("Bearish");
+    setStateCoinmarketcap((prevState) => ({
+      ...prevState,
+      infoStatusTrendIndex: "Bearish",
+    }));
     return 100 - decrease;
   };
 
   return (
     <div className="lg:px-24 px-10 flex flex-col gap-y-10">
       <HomepageSearch
-        assets={assetsAll}
         setIsOpen={setShow}
-        loading={loading}
-        setSearch={setSearch}
+        setId={setId}
         stateCurrency={stateCurrency}
         setPage={setPage}
         setOffset={setOffset}
@@ -155,34 +203,29 @@ export function Homepage() {
       <div className="grid grid-cols-12 gap-x-8">
         <div className="lg:col-span-4 col-span-12">
           <HomepageAsset
-            assetsAll={assetsAll}
-            assets={assets}
-            loading={loadingAsset}
-            setLoading={setLoadingAsset}
-            setSearch={setSearch}
-            setShow={setShow}
-            stateCurrency={stateCurrency}
             limit={limit}
-            offset={offset}
             setOffset={setOffset}
             page={page}
             setPage={setPage}
+            isLoadingAssets={isLoadingAsset}
+            setIsLoadingAssets={setIsLoadingAsset}
+            assets={assets}
+            setId={setId}
+            setShow={setShow}
+            stateCurrency={stateCurrency}
           />
         </div>
         <div className="col-span-8 lg:block hidden sticky top-0 lg:sticky lg:top-0 lg:right-0 lg:h-full border-l-2 lg:pl-8 py:8">
           <div className="lg:sticky lg:top-0 lg:right-0 lg:h-[100vh] bg-white">
             {show ? (
               <HomepageInfo
-                loading={loading}
-                infoLoser={infoLoser}
-                infoGainer={infoGainer}
-                infoTrending={infoTrending}
-                infoTrendIndex={infoTrendIndex}
-                infoStatusTrendIndex={infoStatusTrendIndex}
+                isLoading={loading}
+                stateCoinmarketcap={stateCoinmarketcap}
                 stateCurrency={stateCurrency}
+                stateHeaderText={stateHeaderText}
               />
             ) : (
-              <HomepageDetail setShow={setShow} search={search} />
+              <HomepageDetail setShow={setShow} id={id} />
             )}
           </div>
         </div>

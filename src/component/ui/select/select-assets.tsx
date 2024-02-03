@@ -1,4 +1,5 @@
 "use client";
+import { GetAsset } from "@/api";
 import { AssetsProps } from "@/component/props";
 import { FormatManipulationComponent, roundToNDecimals } from "@/utils";
 import { debounce } from "lodash";
@@ -6,18 +7,14 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Select, { components } from "react-select";
 
 export function SelectAssets({
-  assets,
   setIsOpen,
-  loading,
-  setSearch,
+  setId,
   stateCurrency,
   setPage,
   setOffset,
 }: {
-  assets: AssetsProps[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  loading: boolean;
-  setSearch: Dispatch<SetStateAction<string>>;
+  setId: Dispatch<SetStateAction<string>>;
   setPage: Dispatch<SetStateAction<number>>;
   setOffset: Dispatch<SetStateAction<number>>;
   stateCurrency: {
@@ -26,7 +23,34 @@ export function SelectAssets({
     price: string | undefined;
   };
 }) {
+  const [assets, setAssets] = useState<AssetsProps[]>([]);
   const [query, setQuery] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [totalDisplayed, setTotalDisplayed] = useState<number>(20);
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await GetAsset({
+        stateReq: {
+          search: query || "",
+          limit: 2000,
+          offset: 0,
+        },
+        setLoading: setIsLoading,
+      });
+
+      if (data) {
+        setAssets(data?.data.slice(0, totalDisplayed));
+      }
+    };
+
+    const debouncedGetData = debounce(getData, 900);
+    debouncedGetData();
+
+    return () => {
+      debouncedGetData.cancel();
+    };
+  }, [query, totalDisplayed]);
 
   let assetsOption = [];
   assetsOption = assets.map((item) => ({
@@ -43,7 +67,6 @@ export function SelectAssets({
       setQuery(newValue);
     }
   }, 300);
-  console.log({ query });
 
   const Option = (props: any) => {
     return (
@@ -73,7 +96,6 @@ export function SelectAssets({
                 backgroundColor: "grey",
                 color: "white",
                 padding: "4px",
-                fontFamily: "serif",
                 fontSize: "12px",
                 fontWeight: 300,
                 borderRadius: "4px",
@@ -111,7 +133,7 @@ export function SelectAssets({
     <Select
       className="basic-single"
       classNamePrefix="select"
-      isLoading={loading}
+      isLoading={isLoading}
       isClearable
       isSearchable
       name="assets"
@@ -121,13 +143,28 @@ export function SelectAssets({
       onChange={(optionSelected) => {
         if (optionSelected) {
           setQuery(optionSelected?.value);
-          setSearch(optionSelected?.value);
+          setId(optionSelected?.value);
           setPage(1);
           setOffset(0);
           setIsOpen(false);
         }
       }}
       components={{ Option }}
+      onMenuScrollToBottom={async () => {
+        const newData = await GetAsset({
+          stateReq: {
+            search: query || "",
+            limit: 20,
+            offset: totalDisplayed,
+          },
+          setLoading: setIsLoading,
+        });
+
+        if (newData) {
+          setAssets((prevAssets) => [...prevAssets, ...newData.data]);
+          setTotalDisplayed(totalDisplayed + 20);
+        }
+      }}
     />
   );
 }

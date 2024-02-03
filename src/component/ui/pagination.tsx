@@ -9,7 +9,7 @@ interface PaginationProps extends StyleProps {
   limit: number;
   setOffset: Dispatch<SetStateAction<number>>;
   disabled?: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  setIsLoadingAssets: Dispatch<SetStateAction<boolean>>;
 }
 
 export function Pagination({
@@ -18,12 +18,12 @@ export function Pagination({
   limit,
   setOffset,
   disabled,
-  setLoading,
+  setIsLoadingAssets,
 }: PaginationProps) {
   const nextButton = () => {
     const newPage = page + 1;
     const newOffset = calcNewOffset(newPage, limit);
-    setLoading(true);
+    setIsLoadingAssets(true);
     setPage(newPage);
     setOffset(newOffset);
   };
@@ -31,7 +31,7 @@ export function Pagination({
   const prevButton = () => {
     const newPage = page - 1;
     const newOffset = calcNewOffset(newPage, limit);
-    setLoading(true);
+    setIsLoadingAssets(true);
     setPage(newPage);
     setOffset(newOffset);
   };
@@ -39,6 +39,7 @@ export function Pagination({
   const calcNewOffset = (page = 0, limit = 0) => {
     return page * limit - limit;
   };
+
   return (
     <div
       style={{

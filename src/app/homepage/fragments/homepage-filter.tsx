@@ -1,20 +1,15 @@
-import { AssetsProps } from "@/component/props";
 import { SelectAssets } from "@/component/ui";
 import { Dispatch, SetStateAction } from "react";
 
 export function HomepageSearch({
-  assets,
   setIsOpen,
-  loading,
-  setSearch,
+  setId,
   stateCurrency,
   setOffset,
   setPage,
 }: {
-  assets: AssetsProps[];
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  loading: boolean;
-  setSearch: Dispatch<SetStateAction<string>>;
+  setId: Dispatch<SetStateAction<string>>;
   setPage: Dispatch<SetStateAction<number>>;
   setOffset: Dispatch<SetStateAction<number>>;
   stateCurrency: {
@@ -26,10 +21,8 @@ export function HomepageSearch({
   return (
     <div className="">
       <SelectAssets
-        assets={assets}
+        setId={setId}
         setIsOpen={setIsOpen}
-        loading={loading}
-        setSearch={setSearch}
         stateCurrency={stateCurrency}
         setPage={setPage}
         setOffset={setOffset}

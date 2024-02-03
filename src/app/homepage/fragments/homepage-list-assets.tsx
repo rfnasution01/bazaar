@@ -1,22 +1,18 @@
-import { AssetsProps } from "@/component/props";
+import { AssetsProps, stateCurrency } from "@/component/props";
 import { FormatManipulationComponent, roundToNDecimals } from "@/utils";
 import { Dispatch, SetStateAction } from "react";
 
 export function ListAssets({
   assets,
   stateCurrency,
-  setSearch,
   setShow,
   page,
+  setId,
 }: {
   assets: AssetsProps[];
-  stateCurrency: {
-    symbol: string | undefined;
-    currencySymbol: string | undefined;
-    price: string | undefined;
-  };
-  setSearch: Dispatch<SetStateAction<string>>;
+  stateCurrency: stateCurrency;
   setShow: Dispatch<SetStateAction<boolean>>;
+  setId: Dispatch<SetStateAction<string>>;
   page: number;
 }) {
   return (
@@ -26,7 +22,7 @@ export function ListAssets({
           className="flex gap-4 lg:gap-8 p-4 lg:p-8 shadow hover:cursor-pointer hover:shadow-lg"
           key={idx}
           onClick={() => {
-            setSearch(item?.id);
+            setId(item?.id);
             setShow(false);
           }}
         >
@@ -35,7 +31,7 @@ export function ListAssets({
           </div>
           <div className="flex flex-col flex-1" key={idx}>
             {/* Row 1 */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-4">
               <div className="flex items-end gap-2">
                 <h4 className="font-serif text-xl font-semibold text-black">
                   {item?.name}
