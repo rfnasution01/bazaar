@@ -1,24 +1,36 @@
 "use client";
 import { GetAssetById } from "@/api";
-import { AssetsProps, stateCurrency } from "@/component/props";
+import { AssetsProps } from "@/component/props";
 import { debounce } from "lodash";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Loading from "../loading";
-import { ArrowLeft, Link2, Star } from "lucide-react";
-import Link from "next/link";
-import { FormatManipulationComponent, roundToNDecimals } from "@/utils";
+import {
+  CoinmarketCap,
+  HomepageDetailBreadcrumb,
+  HomepageDetailInfo,
+  HomepageDetailTitle,
+  HomepageSubMenuHistory,
+  HomepageSubMenuMarket,
+  HomepageSubMenuOverview,
+} from ".";
+import { listSubMenu } from "@/const/homepage-submenu";
 
 export function HomepageDetail({
   id,
   setShow,
   stateCurrency,
+  stateHeaderText,
+  isLoadingAssetAll,
 }: {
   id: string;
   setShow: Dispatch<SetStateAction<boolean>>;
-  stateCurrency: stateCurrency;
+  stateCurrency: Record<string, string | undefined>;
+  stateHeaderText: Record<string, number | undefined>;
+  isLoadingAssetAll: boolean;
 }) {
   const [isLoadingDetail, setIsLoadingDetail] = useState<boolean>(false);
   const [detail, setDetail] = useState<AssetsProps | undefined>(undefined);
+  const [subMenu, setSubMenu] = useState<string>("Overview");
 
   useEffect(() => {
     const getData = async () => {
@@ -40,74 +52,76 @@ export function HomepageDetail({
     };
   }, [id]);
 
+  const marketCap = 100;
+  const dominance = stateHeaderText?.marketCap
+    ? (Number(detail?.marketCapUsd) / stateHeaderText?.marketCap) * 100
+    : 0;
+  const supply = (Number(detail?.supply) / Number(detail?.maxSupply)) * 100;
+  const volume24H = stateHeaderText?.volume
+    ? (Number(detail?.volumeUsd24Hr) / stateHeaderText?.volume) * 100
+    : 0;
+
   return (
-    <>
-      {isLoadingDetail ? (
-        <Loading />
-      ) : (
-        <div>
-          {/* Breadcrumb */}
-          <div
-            className="flex items-center gap-2 hover:cursor-pointer hover:text-stone-600 mb-4"
-            onClick={() => setShow(false)}
-          >
-            <span>
-              <ArrowLeft />
-            </span>
-            <h4 className="text-lg font-medium tracking-widest">Back</h4>
-          </div>
-          {/* Data */}
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-4">
-              <h5 className="py-1 px-2 bg-stone-500 text-white rounded-lg text-sm text-serif tracking-widest text-light">{`Rank #${detail?.rank}`}</h5>
-              <Link
-                href={detail?.explorer ?? "#"}
-                target="_blank"
-                className="py-1 px-2 bg-stone-100 text-black rounded-lg flex items-center gap-2 hover:bg-stone-200 text-sm text-serif tracking-widest text-medium"
-              >
-                <span>
-                  <Link2 />
-                </span>
-                <h5>Explorer</h5>
-              </Link>
-              <div className="py-1 px-2 bg-stone-100 flex hover:cursor-pointer items-center text-black rounded-lg flex items-center gap-2 hover:bg-stone-200 text-sm text-serif tracking-widest text-medium">
-                <span>
-                  <Star />
-                </span>
-                <h5>Watchlist</h5>
+    <div className="flex flex-col gap-y-4">
+      <CoinmarketCap
+        isLoading={isLoadingAssetAll}
+        stateCurrency={stateCurrency}
+        stateHeaderText={stateHeaderText}
+      />
+      <div>
+        {isLoadingDetail ? (
+          <Loading />
+        ) : detail === undefined ? (
+          <Loading />
+        ) : (
+          <div className="flex flex-col gap-1">
+            {/* Breadcrumb */}
+            <HomepageDetailBreadcrumb setShow={setShow} />
+            {/* Data */}
+            <HomepageDetailTitle
+              detail={detail}
+              stateCurrency={stateCurrency}
+            />
+            {/* Info  */}
+            <HomepageDetailInfo
+              stateCurrency={stateCurrency}
+              supply={supply}
+              marketCap={marketCap}
+              dominance={dominance}
+              detail={detail}
+              volume24H={volume24H}
+            />
+            {/* Sub Menu  */}
+            <div className="flex flex-col mt-8 gap-y-4">
+              <h2 className="text-2xl font-bold tracking-widest">{subMenu}</h2>
+              <div className="flex bg-stone-100 w-[20vw] rounded-lg">
+                {listSubMenu?.map((item, idx) => (
+                  <div
+                    className={`flex-1 py-1 px-2 ${
+                      item === subMenu ? "bg-stone-200" : "bg-stone-100"
+                    } text-black rounded-lg hover:cursor-pointer flex justify-center gap-2 hover:bg-stone-200 text-sm text-serif tracking-widest text-medium`}
+                    key={idx}
+                    onClick={() => setSubMenu(item)}
+                  >
+                    {item}
+                  </div>
+                ))}
               </div>
-            </div>
-            <div className="">
-              <h4 className="text-xl font-semibold tracking-wider">
-                {detail?.name} Price ({detail?.symbol})
-              </h4>
-              <div className="flex items-center justify-end gap-2">
-                <FormatManipulationComponent
-                  originPrice={Number(detail?.priceUsd)}
-                  currencyPrice={Number(stateCurrency.price)}
-                  currencySymbol={stateCurrency?.currencySymbol}
-                />
-                <span
-                  style={{
-                    backgroundColor:
-                      Number(detail?.changePercent24Hr) > 0 ? "green" : "red",
-                    color: "white",
-                    padding: "4px 8px",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                    fontWeight: 400,
-                  }}
-                >
-                  {Number(detail?.changePercent24Hr) > 0 && "+"}
-                  {roundToNDecimals(Number(detail?.changePercent24Hr), 2)}
-                </span>
+              <div className="">
+                {subMenu === "Overview" ? (
+                  <HomepageSubMenuOverview />
+                ) : subMenu === "History" ? (
+                  <HomepageSubMenuHistory />
+                ) : subMenu === "Market" ? (
+                  <HomepageSubMenuMarket />
+                ) : (
+                  <HomepageSubMenuOverview />
+                )}
               </div>
             </div>
           </div>
-          <div className=""></div>
-          <div className=""></div>
-        </div>
-      )}
-    </>
+        )}
+      </div>
+    </div>
   );
 }

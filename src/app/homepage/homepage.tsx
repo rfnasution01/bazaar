@@ -1,9 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { HomepageAsset, HomepageDetail, HomepageInfo, HomepageSearch } from ".";
+import {
+  HomepageAsset,
+  HomepageDetail,
+  HomepageInfo,
+  HomepageSearch,
+  HomepageTitle,
+} from ".";
 import { GetAsset } from "@/api";
 import { AssetsProps } from "@/component/props";
 import { debounce } from "lodash";
+import { ChevronDown } from "lucide-react";
 
 export function Homepage() {
   const [show, setShow] = useState<boolean>(true);
@@ -193,6 +200,7 @@ export function Homepage() {
 
   return (
     <div className="lg:px-24 px-10 flex flex-col gap-y-10">
+      <HomepageTitle stateCurrency={stateCurrency} />
       <HomepageSearch
         setIsOpen={setShow}
         setId={setId}
@@ -229,6 +237,8 @@ export function Homepage() {
                 setShow={setShow}
                 id={id}
                 stateCurrency={stateCurrency}
+                isLoadingAssetAll={isLoading}
+                stateHeaderText={stateHeaderText}
               />
             )}
           </div>
