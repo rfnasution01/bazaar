@@ -9,11 +9,8 @@ import {
   HomepageDetailBreadcrumb,
   HomepageDetailInfo,
   HomepageDetailTitle,
-  HomepageSubMenuHistory,
-  HomepageSubMenuMarket,
-  HomepageSubMenuOverview,
+  HomepageSubMenu,
 } from ".";
-import { listSubMenu } from "@/const/homepage-submenu";
 
 export function HomepageDetail({
   id,
@@ -31,6 +28,8 @@ export function HomepageDetail({
   const [isLoadingDetail, setIsLoadingDetail] = useState<boolean>(false);
   const [detail, setDetail] = useState<AssetsProps | undefined>(undefined);
   const [subMenu, setSubMenu] = useState<string>("Overview");
+  const [isShowFilter, setIsShowFilter] = useState<boolean>(false);
+  const [interval, setInterval] = useState<string>("m1");
 
   useEffect(() => {
     const getData = async () => {
@@ -60,6 +59,9 @@ export function HomepageDetail({
   const volume24H = stateHeaderText?.volume
     ? (Number(detail?.volumeUsd24Hr) / stateHeaderText?.volume) * 100
     : 0;
+
+  // const [dataFrom, setDataFrom] = useState<string>("");
+  // const [dataTo, setDataTo] = useState<string>("");
 
   return (
     <div className="flex flex-col gap-y-4 lg:max-h-full">
@@ -92,36 +94,16 @@ export function HomepageDetail({
               volume24H={volume24H}
             />
             {/* Sub Menu  */}
-            <div className="flex flex-col mt-8 gap-y-4">
-              <h2 className="text-2xl font-bold tracking-widest">{subMenu}</h2>
-              <div className="flex bg-stone-100 w-[20vw] rounded-lg">
-                {listSubMenu?.map((item, idx) => (
-                  <div
-                    className={`flex-1 py-1 px-2 ${
-                      item === subMenu ? "bg-stone-200" : "bg-stone-100"
-                    } text-black rounded-lg hover:cursor-pointer flex justify-center gap-2 hover:bg-stone-200 text-sm text-serif tracking-widest text-medium`}
-                    key={idx}
-                    onClick={() => setSubMenu(item)}
-                  >
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <div className="">
-                {subMenu === "Overview" ? (
-                  <HomepageSubMenuOverview />
-                ) : subMenu === "Trades" ? (
-                  <HomepageSubMenuHistory
-                    id={id}
-                    stateCurrency={stateCurrency}
-                  />
-                ) : subMenu === "Market" ? (
-                  <HomepageSubMenuMarket />
-                ) : (
-                  <HomepageSubMenuOverview />
-                )}
-              </div>
-            </div>
+            <HomepageSubMenu
+              subMenu={subMenu}
+              setSubMenu={setSubMenu}
+              isShowFilter={isShowFilter}
+              setIsShowFilter={setIsShowFilter}
+              id={id}
+              interval={interval}
+              stateCurrency={stateCurrency}
+              setInterval={setInterval}
+            />
           </div>
         )}
       </div>

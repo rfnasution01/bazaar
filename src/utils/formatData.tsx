@@ -139,3 +139,13 @@ export function convertUnixToDateTime(unixTime: number) {
 
   return formattedDate;
 }
+
+export function convertDateToUnixTime(dateString: string) {
+  const [year, month, day] = dateString.split("-").map(Number);
+
+  const date = new Date(year, month - 1, day);
+
+  const unixTime = date.getTime();
+
+  return unixTime;
+}

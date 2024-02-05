@@ -10,16 +10,13 @@ import {
 import { GetAsset } from "@/api";
 import { AssetsProps } from "@/component/props";
 import { debounce } from "lodash";
-import { ChevronDown } from "lucide-react";
 
 export function Homepage() {
   const [show, setShow] = useState<boolean>(true);
   const [assetsAll, setAssetsAll] = useState<AssetsProps[]>([]);
   const [assets, setAssets] = useState<AssetsProps[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingAsset, setIsLoadingAsset] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
   const [id, setId] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [offset, setOffset] = useState<number>(0);
@@ -53,7 +50,7 @@ export function Homepage() {
           limit: 2000,
           offset: 0,
         },
-        setLoading,
+        setLoading: setIsLoading,
       });
 
       if (data?.data) {
@@ -181,7 +178,7 @@ export function Homepage() {
     return () => {
       debouncedGetData.cancel();
     };
-  }, [limit, offset, search, page]);
+  }, [limit, offset, page]);
 
   const statusTrend = (increase: number, decrease: number) => {
     if (increase > decrease) {
@@ -227,7 +224,7 @@ export function Homepage() {
           <div className="lg:sticky lg:top-0 lg:right-0 lg:h-[100vh] bg-white">
             {show ? (
               <HomepageInfo
-                isLoading={loading}
+                isLoading={isLoading}
                 stateCoinmarketcap={stateCoinmarketcap}
                 stateCurrency={stateCurrency}
                 stateHeaderText={stateHeaderText}

@@ -6,3 +6,4 @@ export * from "./pagination";
 export * from "./button";
 export * from "./button";
 export * from "./progress-bar";
+export * from "./date-range-selector";
