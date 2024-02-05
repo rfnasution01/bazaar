@@ -39,7 +39,7 @@ export function HomepageDetailInfo({
             <BarChart2 size={40} />
           </span>
         </div>
-        <ProgressBar percent={marketCap} color="bg-emerald-300" />
+        <ProgressBar percent={marketCap} color="bg-sky-300" />
       </div>
       {/* Dominance */}
       <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
@@ -52,7 +52,7 @@ export function HomepageDetailInfo({
             <PieChart size={40} />
           </span>
         </div>
-        <ProgressBar percent={dominance} color="bg-emerald-300" />
+        <ProgressBar percent={dominance} color="bg-sky-300" />
       </div>
       {/* Supply */}
       <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
@@ -77,7 +77,7 @@ export function HomepageDetailInfo({
         </div>
         <ProgressBar
           percent={detail?.maxSupply ? supply : 100}
-          color="bg-emerald-300"
+          color="bg-sky-300"
         />
       </div>
       {/* Volume 24H */}
@@ -94,7 +94,7 @@ export function HomepageDetailInfo({
             <LineChart size={40} />
           </span>
         </div>
-        <ProgressBar percent={volume24H} color="bg-emerald-300" />
+        <ProgressBar percent={volume24H} color="bg-sky-300" />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { roundToNDecimals } from "@/utils";
 
 export function ProgressBar({
   percent,
-  color = "bg-emerald-500",
+  color = "bg-sky-100",
 }: {
   percent: number;
   color?: string;

@@ -1,1 +1,1 @@
-export const listSubMenu = ["Overview", "History", "Market"];
+export const listSubMenu = ["Overview", "Trades", "Market"];

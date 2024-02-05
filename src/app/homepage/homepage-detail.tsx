@@ -62,13 +62,13 @@ export function HomepageDetail({
     : 0;
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4 lg:max-h-full">
       <CoinmarketCap
         isLoading={isLoadingAssetAll}
         stateCurrency={stateCurrency}
         stateHeaderText={stateHeaderText}
       />
-      <div>
+      <div className="lg:overflow-y-auto">
         {isLoadingDetail ? (
           <Loading />
         ) : detail === undefined ? (
@@ -110,8 +110,11 @@ export function HomepageDetail({
               <div className="">
                 {subMenu === "Overview" ? (
                   <HomepageSubMenuOverview />
-                ) : subMenu === "History" ? (
-                  <HomepageSubMenuHistory />
+                ) : subMenu === "Trades" ? (
+                  <HomepageSubMenuHistory
+                    id={id}
+                    stateCurrency={stateCurrency}
+                  />
                 ) : subMenu === "Market" ? (
                   <HomepageSubMenuMarket />
                 ) : (

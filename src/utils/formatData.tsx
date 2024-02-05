@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export function splittedArray({
   text,
   split,
@@ -128,4 +130,12 @@ export function convertSlugToText(slug = "") {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
   return text;
+}
+
+export function convertUnixToDateTime(unixTime: number) {
+  const dateObject = dayjs(unixTime);
+
+  const formattedDate = dateObject.format("DD/MM/YYYY HH:mm");
+
+  return formattedDate;
 }
