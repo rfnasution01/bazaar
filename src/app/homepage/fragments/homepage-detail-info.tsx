@@ -25,7 +25,7 @@ export function HomepageDetailInfo({
   return (
     <div className="grid grid-cols-12 gap-4">
       {/* Market Cap */}
-      <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
+      <div className="col-span-3 p-4 shadow hover:shadow-lg border hover:cursor-pointer flex flex-col gap-y-2">
         <div className="flex items-center">
           <div className="flex-1">
             <h4 className="font-serif text-lg font-semibold">Market Cap</h4>
@@ -42,7 +42,7 @@ export function HomepageDetailInfo({
         <ProgressBar percent={marketCap} color="bg-sky-300" />
       </div>
       {/* Dominance */}
-      <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
+      <div className="col-span-3 p-4 shadow hover:shadow-lg border hover:cursor-pointer flex flex-col gap-y-2">
         <div className="flex items-center">
           <div className="flex-1">
             <h4 className="font-serif text-lg font-semibold">Dominance</h4>
@@ -55,7 +55,7 @@ export function HomepageDetailInfo({
         <ProgressBar percent={dominance} color="bg-sky-300" />
       </div>
       {/* Supply */}
-      <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
+      <div className="col-span-3 p-4 shadow hover:shadow-lg border hover:cursor-pointer flex flex-col gap-y-2">
         <div className="flex items-center">
           <div className="flex-1">
             <h4 className="font-serif text-lg font-semibold">Supply</h4>
@@ -81,7 +81,7 @@ export function HomepageDetailInfo({
         />
       </div>
       {/* Volume 24H */}
-      <div className="col-span-3 p-4 shadow hover:shadow-lg hover:cursor-pointer flex flex-col gap-y-2">
+      <div className="col-span-3 p-4 shadow hover:shadow-lg border hover:cursor-pointer flex flex-col gap-y-2">
         <div className="flex items-center">
           <div className="flex-1">
             <h4 className="text-lg font-semibold">Volume 24Hr</h4>
