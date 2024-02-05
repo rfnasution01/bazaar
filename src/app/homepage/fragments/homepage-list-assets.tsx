@@ -31,7 +31,7 @@ export function ListAssets({
           </div>
           <div className="flex flex-col flex-1" key={idx}>
             {/* Row 1 */}
-            <div className="flex justify-between items-center gap-4">
+            <div className="">
               <div className="flex items-end gap-2">
                 <h4 className="font-serif text-xl font-semibold text-black">
                   {item?.name}
@@ -40,20 +40,25 @@ export function ListAssets({
                   {item?.symbol}
                 </h4>
               </div>
-
-              <span
-                className={`p-1 text- font-light rounded-lg text-white ${
-                  Number(item?.changePercent24Hr) > 0
-                    ? "bg-green-500"
-                    : "bg-red-500"
-                }`}
-              >
-                {Number(item?.changePercent24Hr) > 0 && "+"}
-                {roundToNDecimals(Number(item?.changePercent24Hr), 2)}
-              </span>
+              <FormatManipulationComponent
+                originPrice={Number(item?.volumeUsd24Hr)}
+                currencyPrice={Number(stateCurrency.price)}
+                currencySymbol={stateCurrency?.currencySymbol}
+              />
             </div>
-            {/* Row 2 */}
-            <div className="flex justify-between items-center">
+          </div>
+          <div className="text-right">
+            <span
+              className={`p-1 text-sm text-right font-light rounded-lg text-white ${
+                Number(item?.changePercent24Hr) > 0
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              }`}
+            >
+              {Number(item?.changePercent24Hr) > 0 && "+"}
+              {roundToNDecimals(Number(item?.changePercent24Hr), 2)}
+            </span>
+            <div className="mt-1">
               <FormatManipulationComponent
                 originPrice={Number(item?.priceUsd)}
                 currencyPrice={Number(stateCurrency.price)}

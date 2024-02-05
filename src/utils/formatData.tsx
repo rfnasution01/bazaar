@@ -89,13 +89,13 @@ export function numberDecimalSetting(priceOrigin = 0, priceCurrency = 0) {
   if (prices > 1000) {
     return roundToNDecimals(prices, 0);
   } else if (prices > 100) {
-    return roundToNDecimals(prices, 2);
+    return roundToNDecimals(prices, 1);
   } else if (prices > 10) {
-    return roundToNDecimals(prices, 4);
+    return roundToNDecimals(prices, 2);
   } else if (prices > 1) {
-    return roundToNDecimals(prices, 6);
+    return roundToNDecimals(prices, 4);
   } else {
-    return roundToNDecimals(prices, 8);
+    return roundToNDecimals(prices, 6);
   }
 }
 

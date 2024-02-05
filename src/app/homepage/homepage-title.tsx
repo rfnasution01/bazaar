@@ -8,7 +8,7 @@ export function HomepageTitle({
 }) {
   return (
     <>
-      <div className="flex-1 flex justify-end block lg:hidden">
+      <div className="flex justify-end block lg:hidden">
         <HomepageCurrency stateCurrency={stateCurrency} />
       </div>
       <div className="flex justify-between items-start gap-x-4">
@@ -16,11 +16,16 @@ export function HomepageTitle({
           <h5 className="lg:text-2xl text-lg font-semibold tracking-widest">
             Bazaar
           </h5>
-          <h6 className="lg:text-md text-xs font-light tracking-wide">
+          <h6 className="lg:text-lg text-xs font-light tracking-wide">
             Dengan Bazaar, eksplorasi dunia crypto menjadi lebih mudah. Pantau
             harga dan perubahan pasar terbaru dengan cepat dan akurat, semua
             dalam satu platform yang intuitif.
           </h6>
+        </div>
+        <div className="flex-1">
+          <div className="flex justify-end">
+            <HomepageCurrency stateCurrency={stateCurrency} />
+          </div>
         </div>
       </div>
     </>
