@@ -34,7 +34,7 @@ export function HomepageDetailContent({
           // }
         />
       ) : subMenu === "Market" ? (
-        <HomepageSubMenuMarket />
+        <HomepageSubMenuMarket id={id} stateCurrency={stateCurrency} />
       ) : (
         <HomepageSubMenuOverview />
       )}

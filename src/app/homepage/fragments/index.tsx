@@ -8,6 +8,6 @@ export * from "./homepage-submenu-history";
 export * from "./homepage-submenu-market";
 export * from "./homepage-submenu-overview";
 export * from "./homepage-currency";
-export * from "./homepage-detail-filter";
-export * from "./homepage-detail-content";
+export * from "./homepage-submenu-filter";
+export * from "./homepage-submenu-content";
 export * from "./homepage-submenu";

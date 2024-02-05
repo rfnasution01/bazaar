@@ -8,12 +8,14 @@ export function ListAssets({
   setShow,
   page,
   setId,
+  limit,
 }: {
   assets: AssetsProps[];
   stateCurrency: stateCurrency;
   setShow: Dispatch<SetStateAction<boolean>>;
   setId: Dispatch<SetStateAction<string>>;
   page: number;
+  limit: number;
 }) {
   return (
     <div className="flex flex-col gap-y-4">
@@ -27,7 +29,7 @@ export function ListAssets({
           }}
         >
           <div className="flex items-center">
-            <h5 className="text-xl">{(page - 1) * 100 + (idx + 1)}.</h5>
+            <h5 className="text-xl">{(page - 1) * limit + (idx + 1)}.</h5>
           </div>
           <div className="flex flex-col flex-1" key={idx}>
             {/* Row 1 */}

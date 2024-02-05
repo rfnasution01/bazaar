@@ -5,17 +5,22 @@ import Loading from "../loading";
 import { convertSlugToText, roundToNDecimals } from "@/utils";
 import { Gauge } from "@/component/ui";
 import { CoinmarketCap } from ".";
+import { Dispatch, SetStateAction } from "react";
 
 export function HomepageInfo({
   isLoading,
   stateCurrency,
   stateCoinmarketcap,
   stateHeaderText,
+  setId,
+  setShow,
 }: {
   isLoading: boolean;
   stateCurrency: Record<string, string | undefined>;
   stateHeaderText: Record<string, number | undefined>;
   stateCoinmarketcap: stateCoinmarketcap;
+  setId: Dispatch<SetStateAction<string>>;
+  setShow: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
     <div className="h-full flex flex-col gap-y-4 lg:max-h-full">
@@ -54,7 +59,14 @@ export function HomepageInfo({
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
                 {stateCoinmarketcap?.infoGainer &&
                   stateCoinmarketcap?.infoGainer?.map((items, idx) => (
-                    <div className="flex items-center gap-2 w-full" key={idx}>
+                    <div
+                      className="flex items-center w-full hover:bg-stone-100 px-2"
+                      key={idx}
+                      onClick={() => {
+                        setId(items?.id);
+                        setShow(false);
+                      }}
+                    >
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
                         <h5 className="text-left text-md font-medium">
@@ -72,7 +84,14 @@ export function HomepageInfo({
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
                 {stateCoinmarketcap?.infoLoser &&
                   stateCoinmarketcap?.infoLoser?.map((items, idx) => (
-                    <div className="flex items-center gap-2 w-full" key={idx}>
+                    <div
+                      className="flex items-center w-full hover:bg-stone-100 px-2"
+                      key={idx}
+                      onClick={() => {
+                        setId(items?.id);
+                        setShow(false);
+                      }}
+                    >
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
                         <h5 className="text-left text-md font-medium">
@@ -90,7 +109,14 @@ export function HomepageInfo({
               <div className="flex flex-col justify-center items-start gap-2 mt-4">
                 {stateCoinmarketcap?.infoTrending &&
                   stateCoinmarketcap?.infoTrending?.map((items, idx) => (
-                    <div className="flex items-center gap-2 w-full" key={idx}>
+                    <div
+                      className="flex items-center w-full hover:bg-stone-100 px-2"
+                      key={idx}
+                      onClick={() => {
+                        setId(items?.id);
+                        setShow(false);
+                      }}
+                    >
                       <h5 className="min-w-[5%]">{idx + 1}.</h5>
                       <div className="flex flex-1 flex-col items-start">
                         <h5 className="text-left text-md font-medium">

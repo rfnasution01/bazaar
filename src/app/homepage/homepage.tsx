@@ -228,6 +228,8 @@ export function Homepage() {
                 stateCoinmarketcap={stateCoinmarketcap}
                 stateCurrency={stateCurrency}
                 stateHeaderText={stateHeaderText}
+                setId={setId}
+                setShow={setShow}
               />
             ) : (
               <HomepageDetail

@@ -20,8 +20,6 @@ export function HomepageSubMenuHistory({
   const [history, setHistory] = useState<HistoryProps[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
 
-  console.log(fromToDateTime);
-
   useEffect(() => {
     const getData = async () => {
       const data = await GetHiistoryById({
@@ -56,16 +54,24 @@ export function HomepageSubMenuHistory({
       ) : history?.length === 0 ? (
         <Loading />
       ) : (
-        <table className="table-fixed w-full border">
+        <table className="table-auto w-full border">
           <thead className="border">
             <tr className="bg-sky-100">
+              <th className="border">No</th>
+
               <th className="border">Time</th>
               <th className="border">Price</th>
             </tr>
           </thead>
           <tbody>
             {history?.map((item, idx) => (
-              <tr key={idx}>
+              <tr
+                key={idx}
+                className={`${
+                  idx % 2 === 0 ? "bg-white" : "bg-stone-100"
+                } hover:bg-stone-200 hover:cursor-pointer`}
+              >
+                <td className="text-center border-l">{idx + 1}</td>
                 <td className="text-center border-l">
                   {convertUnixToDateTime(item?.time)}
                 </td>

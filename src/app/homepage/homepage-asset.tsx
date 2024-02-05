@@ -42,6 +42,7 @@ export function HomepageAsset({
               setShow={setShow}
               page={page}
               setId={setId}
+              limit={limit}
             />
 
             <Pagination
