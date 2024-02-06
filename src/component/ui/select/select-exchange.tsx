@@ -1,15 +1,14 @@
 "use client";
-import { GetAsset } from "@/api";
-import { AssetsProps } from "@/component/props";
-import { FormatManipulationComponent, roundToNDecimals } from "@/utils";
+import { GetExchange } from "@/api";
+import { exchangeProps } from "@/component/props";
+import { roundToNDecimals } from "@/utils";
 import { debounce } from "lodash";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Select, { components } from "react-select";
 
-export function SelectAssets({
+export function SelectExchange({
   setIsOpen,
   setId,
-  stateCurrency,
   setPage,
   setOffset,
 }: {
@@ -17,30 +16,20 @@ export function SelectAssets({
   setId: Dispatch<SetStateAction<string>>;
   setPage: Dispatch<SetStateAction<number>>;
   setOffset: Dispatch<SetStateAction<number>>;
-  stateCurrency: {
-    symbol: string | undefined;
-    currencySymbol: string | undefined;
-    price: string | undefined;
-  };
 }) {
-  const [assets, setAssets] = useState<AssetsProps[]>([]);
+  const [exchanges, setExchanges] = useState<exchangeProps[]>([]);
   const [query, setQuery] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [totalDisplayed, setTotalDisplayed] = useState<number>(20);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await GetAsset({
-        stateReq: {
-          search: query || "",
-          limit: 2000,
-          offset: 0,
-        },
+      const data = await GetExchange({
         setLoading: setIsLoading,
       });
 
       if (data) {
-        setAssets(data?.data.slice(0, totalDisplayed));
+        setExchanges(data?.data.slice(0, totalDisplayed));
       }
     };
 
@@ -52,13 +41,11 @@ export function SelectAssets({
     };
   }, [query, totalDisplayed]);
 
-  let assetsOption = [];
-  assetsOption = assets.map((item) => ({
+  let exchangesOption = [];
+  exchangesOption = exchanges.map((item) => ({
     value: item?.id,
     label: item?.name,
-    symbol: item?.symbol,
-    price: item?.priceUsd,
-    change: item?.changePercent24Hr,
+    change: item?.percentTotalVolume,
     rank: item?.rank,
   }));
 
@@ -80,17 +67,7 @@ export function SelectAssets({
               color: "#333",
             }}
           >
-            {props?.data?.value.toUpperCase() ?? "-"} -{" "}
-            <span
-              style={{
-                fontFamily: "serif",
-                fontSize: "12px",
-                fontWeight: 400,
-                color: "grey",
-              }}
-            >
-              {props?.data?.symbol ?? "-"}
-            </span>{" "}
+            {props?.data?.label ?? "-"} -{" "}
             <span
               style={{
                 backgroundColor: "grey",
@@ -105,11 +82,6 @@ export function SelectAssets({
             </span>
           </h5>
           <div className="flex items-center gap-2">
-            <FormatManipulationComponent
-              originPrice={Number(props?.data?.price)}
-              currencyPrice={Number(stateCurrency.price)}
-              currencySymbol={stateCurrency?.currencySymbol}
-            />
             <span
               style={{
                 backgroundColor: props?.data?.change > 0 ? "green" : "red",
@@ -136,9 +108,9 @@ export function SelectAssets({
       isLoading={isLoading}
       isClearable
       isSearchable
-      name="assets"
-      options={assetsOption}
-      placeholder="Indodax"
+      name="exchanges"
+      options={exchangesOption}
+      placeholder="BTC / Bitcoin"
       onInputChange={search}
       onChange={(optionSelected) => {
         if (optionSelected) {
@@ -151,17 +123,12 @@ export function SelectAssets({
       }}
       components={{ Option }}
       onMenuScrollToBottom={async () => {
-        const newData = await GetAsset({
-          stateReq: {
-            search: query || "",
-            limit: 20,
-            offset: totalDisplayed,
-          },
+        const newData = await GetExchange({
           setLoading: setIsLoading,
         });
 
         if (newData) {
-          setAssets((prevAssets) => [...prevAssets, ...newData.data]);
+          setExchanges((prevexchanges) => [...prevexchanges, ...newData.data]);
           setTotalDisplayed(totalDisplayed + 20);
         }
       }}

@@ -125,3 +125,21 @@ export async function GetRates({
     setLoading(false);
   }
 }
+
+export async function GetExchange({
+  setLoading,
+}: {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+}) {
+  setLoading(true);
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exchanges`, {
+      next: { revalidate: 60 },
+    });
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+}

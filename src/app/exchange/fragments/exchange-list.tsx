@@ -1,17 +1,17 @@
-import { AssetsProps, stateCurrency } from "@/component/props";
-import Loading from "../loading";
-import { ListAssets } from ".";
+import { exchangeProps, stateCurrency } from "@/component/props";
 import { Dispatch, SetStateAction } from "react";
 import { Pagination } from "@/component/ui";
+import Loading from "@/app/loading";
+import { ExchangeListData } from ".";
 
-export function HomepageAsset({
+export function ExchangeList({
   limit,
   setOffset,
   page,
   setPage,
-  isLoadingAssets,
-  setIsLoadingAssets,
-  assets,
+  isLoadingExchange,
+  setIsLoadingExchange,
+  exchanges,
   setId,
   setShow,
   stateCurrency,
@@ -20,24 +20,24 @@ export function HomepageAsset({
   setOffset: Dispatch<SetStateAction<number>>;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
-  isLoadingAssets: boolean;
-  setIsLoadingAssets: Dispatch<SetStateAction<boolean>>;
+  isLoadingExchange: boolean;
+  setIsLoadingExchange: Dispatch<SetStateAction<boolean>>;
   setId: Dispatch<SetStateAction<string>>;
   setShow: Dispatch<SetStateAction<boolean>>;
-  assets: AssetsProps[];
+  exchanges: exchangeProps[];
   stateCurrency: stateCurrency;
 }) {
   return (
     <div className="h-full flex flex-col gap-y-4">
       <div>
-        {isLoadingAssets ? (
+        {isLoadingExchange ? (
           <Loading />
-        ) : assets?.length <= 0 ? (
+        ) : exchanges?.length <= 0 ? (
           <Loading />
         ) : (
           <div className="flex flex-col gap-y-8 pb-8">
-            <ListAssets
-              assets={assets}
+            <ExchangeListData
+              exchanges={exchanges}
               stateCurrency={stateCurrency}
               setShow={setShow}
               page={page}
@@ -48,10 +48,12 @@ export function HomepageAsset({
             <Pagination
               limit={limit}
               setOffset={setOffset}
-              setIsLoadingAssets={setIsLoadingAssets}
+              setIsLoadingAssets={setIsLoadingExchange}
               page={page}
               setPage={setPage}
-              disabled={assets?.length < 100 || isLoadingAssets || page >= 23}
+              disabled={
+                exchanges?.length < 100 || isLoadingExchange || page >= 23
+              }
             />
           </div>
         )}
